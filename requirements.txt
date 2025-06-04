@@ -1,0 +1,12 @@
+# requirements.txt
+requests
+sentence-transformers
+faiss-cpu
+numpy
+fastapi
+uvicorn
+jinja2
+httpx
+python-dotenv
+transformers
+python-multipart
