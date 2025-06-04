@@ -5,12 +5,12 @@ import faiss
 from sentence_transformers import SentenceTransformer
 
 class RAGIndex:
-    def __init__(self, text_path= "university_texts.txt", index_path="app/documents/rag_index.faiss", chunks_path="app/documents/rag_chunks.json", chunk_size=500):
+    def __init__(self, text_path= "university_texts_cleaned.txt", index_path="app/documents/rag_index.faiss", chunks_path="app/documents/rag_chunks.json", chunk_size=300):
         self.text_path = text_path
         self.index_path = index_path
         self.chunks_path = chunks_path
         self.chunk_size = chunk_size
-        self.model = SentenceTransformer("intfloat/multilingual-e5-small")
+        self.model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-mpnet-base-v2")
         self.chunks = []
         self.embeddings = None
         self.index = None

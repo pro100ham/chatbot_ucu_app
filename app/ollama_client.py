@@ -1,5 +1,7 @@
 from transformers import AutoTokenizer
 from sentence_transformers import SentenceTransformer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from fastapi import logger
 import requests
 import hashlib
@@ -47,25 +49,26 @@ class OllamaClient:
     def hash_question(self, question: str) -> str:
         return hashlib.sha256(question.encode("utf-8")).hexdigest()
 
-    def retrieve_context(self, question: str, top_k: int = 6, max_tokens: int = 1800) -> str:
+    def retrieve_context(self, question: str, top_k: int = 6, max_tokens: int = 2048) -> str:
+        # Ембедінг-запит
         question_vector = self.model.encode([question], convert_to_numpy=True)
-
         distances, indices = self.index.search(question_vector, top_k)
+        embedding_chunks = [self.chunks[i] for i in indices[0] if i != -1]
 
-        context_chunks = []
-        for idx in indices[0]:
-            if idx != -1 and idx < len(self.chunks):
-                chunk = self.chunks[idx]
-                if chunk.strip(): 
-                    context_chunks.append(chunk)
+        # TF-IDF (ключові слова)
+        vectorizer = TfidfVectorizer().fit(self.chunks)
+        tfidf_matrix = vectorizer.transform(self.chunks)
+        tfidf_q = vectorizer.transform([question])
+        tfidf_scores = cosine_similarity(tfidf_q, tfidf_matrix).flatten()
+        top_indices_tfidf = tfidf_scores.argsort()[-top_k:][::-1]
+        keyword_chunks = [self.chunks[i] for i in top_indices_tfidf]
 
-        print(f"[DEBUG] Retrieved {len(context_chunks)} chunks for question: {question}")
-        for i, chunk in enumerate(context_chunks[:3]):
-            print(f"[CONTEXT {i+1}] >>> {chunk[:120]}...")
+        # Об’єднуємо і видаляємо дублікати
+        combined_chunks = list(dict.fromkeys(embedding_chunks + keyword_chunks))
+        print(f"[DEBUG] Retrieved {len(combined_chunks)} combined context chunks")
 
-        context = "\n\n".join(context_chunks)
+        context = "\n\n".join(combined_chunks)
         context = self.truncate_by_tokens(context, max_tokens)
-
         print(f"[DEBUG] Final context length (chars): {len(context)}")
         return context
 
@@ -77,7 +80,7 @@ class OllamaClient:
         prompt = (
             "Ти — розумний україномовний асистент Українського Католицького Університету (УКУ).\n"
             "Відповідай українською мовою. Відповідай тільки на основі наданого контексту.\n"
-            #"Не вигадуй відповідей. Якщо відповіді немає — так і скажи.\n"
+            "Не вигадуй відповідей. Якщо відповіді немає — так і скажи.\n"
             "Якщо відповіді немає спробуй знайти на сторінках ресурсів - https://lvbs.com.ua/home,https://er.ucu.edu.ua/home , https://wiki.ucu.edu.ua/start , https://ucu.edu.ua/index , https://vstup.ucu.edu.ua/start\n"
         )
 
@@ -101,7 +104,7 @@ class OllamaClient:
 
         context = self.retrieve_context(question)
         prompt = self.build_prompt(context, question, stream=False)
-        prompt = self.truncate_by_tokens(prompt, max_tokens=4096)
+        #prompt = self.truncate_by_tokens(prompt, max_tokens=4096)
 
         payload = {
             "model": self.MODEL_NAME,
@@ -118,7 +121,7 @@ class OllamaClient:
     def ask_stream(self, question: str):
         context = self.retrieve_context(question)
         prompt = self.build_prompt(context, question, stream=True)
-        prompt = self.truncate_by_tokens(prompt, max_tokens=4096)
+        #prompt = self.truncate_by_tokens(prompt, max_tokens=4096)
 
         payload = {
             "model": self.MODEL_NAME,

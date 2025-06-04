@@ -97,10 +97,16 @@ def main(start_urls, output_path):
 
 # Виклик
 urls = [
+    "https://lvbs.com.ua/alumni/",
+    "https://lvbs.com.ua/education/programs/",
     "https://lvbs.com.ua/home",
     "https://wiki.ucu.edu.ua/start",
     "https://ucu.edu.ua/index",
-    "https://vstup.ucu.edu.ua/start",
+    "https://vstup.ucu.edu.ua/bakalavrat/",
+    "https://vstup.ucu.edu.ua/magistratura/",
+    "https://vstup.ucu.edu.ua/vstup-uku/vstup-bakalavrat/",
+    "https://vstup.ucu.edu.ua/vstup-uku/vstup-2019-magistratura/",
+    "https://ucu.edu.ua/thedigital/",
     "https://er.ucu.edu.ua/home"
  ]
 

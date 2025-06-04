@@ -10,3 +10,9 @@ httpx
 python-dotenv
 transformers
 python-multipart
+sqlalchemy
+aiosqlite
+duckduckgo-search
+google-api-python-client
+duckduckgo-search           
+openai           

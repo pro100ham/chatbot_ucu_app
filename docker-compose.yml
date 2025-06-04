@@ -27,6 +27,7 @@ services:
 
 volumes:
   ollama-data:
+  - ./data:/app/data
 
 networks:
   chatbot-net:

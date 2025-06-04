@@ -8,12 +8,21 @@
 </head>
 <body>
     <div class="chat-container">
-        <div id="chat-box" class="chat-box">
+        <div style="margin-bottom: 10px; text-align: right;">
+            <label for="model-selector">Модель:</label>
+            <select id="model-selector" style="padding: 6px; border-radius: 6px;">
+                <option value="ollama">🧠 Ollama</option>
+                <option value="chatgpt">💬 ChatGPT</option>
+                <option value="chatgptweb">🌐 ChatGPT with Web</option>
+            </select>
         </div>
+
+        <div id="chat-box" class="chat-box"></div>
+
         <div class="input-row">
             <input type="text" id="user-input" class="chat-input" placeholder="Напишіть повідомлення..." />
             <button id="send-button" class="send-button">➤</button>
-        </div>        
+        </div>
     </div>
 
     <script src="/static/js/chat.js"></script>
