@@ -1,81 +1,82 @@
-# 🤖 ChatBot Project — AI Асистент для Університету
+# 🤖 ChatBot Project — AI Assistant for University
 
-Цей проєкт — розумний чат-бот для університету, побудований на основі **FastAPI**, **Ollama**, **OpenAI**, з підтримкою RAG-підходу, веб-пошуку, стримінгу відповідей та ведення історії сесій.
-
----
-
-## 🚀 Основні можливості
-
-- 🧠 **LLM-підтримка**: 
-  - `🧠 Ollama` — локальні моделі (Mistral, Phi тощо)
-  - `💬 ChatGPT` — OpenAI з локальним контекстом (RAG)
-  - `🌐 ChatGPT with Web` — OpenAI з живим пошуком по сайтах
-- 🔎 **RAG-пошук по контексту**: FAISS + Sentence Transformers
-- 🌍 **Веб-пошук (Google Custom Search)** для зовнішніх запитів
-- 🧵 **Streaming-відповіді**: live-стрім тексту
-- 🕒 **Сесії користувача**: автоматичне ведення однієї активної сесії на кожну модель
-- 💬 **CRM інтеграція**: створення тікетів при запитах
-- 🎨 **Сучасний UI**: стиль Microsoft Teams / iOS, темна тема
+This project is an intelligent chatbot built for a university setting using **FastAPI**, **Ollama**, **OpenAI**, with support for RAG-based search, web browsing, response streaming, and user session tracking.
 
 ---
 
-## 🗂 Структура проєкту
+## 🚀 Key Features
+
+- 🧠 **LLM Support**:  
+  - `🧠 Ollama` — local models (e.g., Mistral, Phi)
+  - `💬 ChatGPT` — OpenAI with local RAG context
+  - `🌐 ChatGPT with Web` — OpenAI with live search from the internet
+
+- 🔍 **RAG Context Search**: FAISS + Sentence Transformers  
+- 🌐 **Web Search (Google Custom Search)** for external information  
+- 🧵 **Streaming Responses**: real-time text streaming  
+- 🕒 **User Sessions**: automatic session tracking per LLM instance  
+- 📨 **CRM Integration**: ticket creation based on user inquiries  
+- 🎨 **Modern UI**: Microsoft Teams / iOS-style design, dark theme  
+
+---
+
+## 🗂 Project Structure
 
 ```
 chatbot_project/
 ├── app/
-│   ├── LLM/                     # LLM-клієнти: Ollama, ChatGPT, ChatGPTWeb
-│   ├── sessionDB/               # SQLAlchemy моделі та сесійна логіка
-│   ├── utils/                   # RAG, prompt builder, streaming, web search
-│   ├── templates/               # HTML шаблони
-│   ├── static/                  # CSS, JS, іконки
-├── documents/                   # Файли для RAG
-├── .env.example                 # Приклад налаштувань
-├── requirements.txt             # Python залежності
-├── Dockerfile                   # Docker інструкція
-├── docker-compose.yml           # FastAPI + Ollama
-├── main.py                      # Основна FastAPI логіка
+│   ├── LLM/                    # LLM clients: Ollama, ChatGPT, ChatGPTWeb
+│   ├── sessionDB/              # SQLAlchemy models and session logic
+│   ├── utils/                  # RAG, prompts, streaming, web search
+│   ├── templates/              # HTML templates (Jinja2)
+│   ├── static/                 # CSS, JS, icons
+├── documents/                  # RAG source files
+├── .env.example                # Sample environment configuration
+├── requirements.txt            # Python dependencies
+├── Dockerfile                  # FastAPI Docker setup
+├── docker-compose.yml          # FastAPI + Ollama services
+├── main.py                     # Main FastAPI app
 ```
 
 ---
 
-## ⚙️ Встановлення
+## ⚙️ Setup Instructions
 
-### 🧰 1. Клонування та налаштування
+### 🧰 1. Clone and configure
 
 ```bash
-git clone https://github.com/pro100ham/chatbot_project.git
+git clone https://github.com/your_username/chatbot_project.git
 cd chatbot_project
 cp .env.example .env
 ```
 
-🔒 Вкажи свій OpenAI ключ у `.env`.
+Set your OpenAI API key in `.env`.
 
 ---
 
-### 🐋 2. Запуск через Docker
+### 🐋 2. Run with Docker
 
 ```bash
 docker-compose up --build
 ```
 
-📍 Веб-інтерфейс: [http://localhost:8000](http://localhost:8000)  
-📍 Swagger: [http://localhost:8000/docs](http://localhost:8000/docs)
+📍 Web interface: [http://localhost:8000](http://localhost:8000)  
+📍 Swagger API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
-### ☁️ 3. Розгортання на Azure VM
+### ☁️ 3. Deployment to Azure VM
 
 ```bash
-# Підключення
+# SSH into the VM
 ssh -i your_key.pem azureuser@<your-vm-ip>
 
-# Docker
+# Install Docker
 sudo apt update
 sudo apt install -y docker.io docker-compose
 sudo usermod -aG docker $USER
 
-# Проєкт
+# Copy the project
 scp -r -i your_key.pem ./chatbot_project azureuser@<your-vm-ip>:~
 cd chatbot_project
 docker-compose up --build -d
@@ -83,7 +84,7 @@ docker-compose up --build -d
 
 ---
 
-## 🧠 .env приклад
+## 🧠 .env Example
 
 ```dotenv
 # LLM
@@ -95,42 +96,36 @@ OPENAI_MODEL=gpt-3.5-turbo
 LOCAL_OLLAMA_URL=http://host.docker.internal:11434
 DOCKER_OLLAMA_URL=http://ollama:11434
 
-# Google Search API (опційно для ChatGPT with Web)
+# Google Search API (optional for ChatGPT with Web)
 GOOGLE_API_KEY=your_google_api_key
 GOOGLE_CX=your_custom_search_engine_id
 ```
 
 ---
 
-## 🧪 UI Можливості
+## 🧪 UI Features
 
-- 🔄 Перемикання LLM: Ollama, ChatGPT, ChatGPT+Web
-- 🟢 Стрімінг відповідей
-- ✨ Відображення форм для тікетів
-- 📱 Мобільна адаптація
-
----
-
-## ✨ UI Preview
-
-![Chat Preview](app/static/img/chat_preview.png)
+- 🔄 Switch between LLMs: Ollama, ChatGPT, ChatGPT+Web
+- 🟢 Streamed responses
+- 📨 Ticket submission forms
+- 📱 Mobile-friendly design
 
 ---
 
-## 🔐 Безпека
+## 🔐 Security
 
-- `.env` додано до `.gitignore`
-- Використання `.env.example` замість справжніх ключів
-- Секрети не зберігаються в історії Git
+- `.env` is excluded via `.gitignore`
+- `.env.example` is provided for safe configuration sharing
+- No secrets are committed to Git history
 
 ---
 
-## 🔮 Майбутнє
+## 🔮 Roadmap
 
-- [ ] Авторизація користувачів
-- [ ] Розширений адмін-інтерфейс
-- [ ] Підтримка PDF/CSV/API в якості джерел RAG
-- [ ] Автоматичне завершення сесій по неактивності
+- [ ] User authentication
+- [ ] Admin interface
+- [ ] RAG sources from PDF/CSV/API
+- [ ] Auto-closing sessions based on inactivity
 
 ---
 
