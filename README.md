@@ -112,6 +112,12 @@ GOOGLE_CX=your_custom_search_engine_id
 
 ---
 
+## ✨ UI Preview
+
+![Chat Preview](app/static/img/chat_preview.png)
+
+---
+
 ## 🔐 Security
 
 - `.env` is excluded via `.gitignore`
